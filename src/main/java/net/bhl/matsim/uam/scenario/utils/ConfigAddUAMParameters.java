@@ -45,7 +45,7 @@ public class ConfigAddUAMParameters {
 		//config.getModules().get(UAMConstants.uam).addParam("ptSimulation", String.valueOf(ptSimulation));
 
 		// If PT simulation is desired (true), PT may not be listed under teleportedModeParameters, else it must be
-		ConfigGroup planscalcroute = config.getModules().get("planscalcroute");
+		ConfigGroup planscalcroute = config.getModules().get("routing");
 		Collection<? extends ConfigGroup> teleportedModeParameters = planscalcroute.getParameterSets("teleportedModeParameters");
 
 		boolean ptParamsExistent = false;
@@ -72,11 +72,11 @@ public class ConfigAddUAMParameters {
 			planscalcroute.addParameterSet(modeRoutingParams);
 		}
 
-		// UAM planCalcScore activities
-		ConfigGroup uamInteractionParam = config.getModules().get("planCalcScore").createParameterSet("activityParams");
+		// UAM scoring activities
+		ConfigGroup uamInteractionParam = config.getModules().get("scoring").createParameterSet("activityParams");
 		uamInteractionParam.addParam("activityType", UAMConstants.interaction);
 		uamInteractionParam.addParam("scoringThisActivityAtAll", "false");
-		config.getModules().get("planCalcScore").addParameterSet(uamInteractionParam);
+		config.getModules().get("scoring").addParameterSet(uamInteractionParam);
 
 		String mainMode = config.getModules().get("qsim").getParams().get("mainMode");
 		config.getModules().get("qsim").addParam("mainMode",
@@ -84,19 +84,19 @@ public class ConfigAddUAMParameters {
 						+ "," + UAMConstants.access + TransportMode.car
 						+ "," + UAMConstants.egress + TransportMode.car);
 
-		// UAM planCalcScore modes
+		// UAM scoring modes
 		String[] modeScores = {UAMConstants.uam,
 				UAMConstants.access + TransportMode.walk, UAMConstants.egress + TransportMode.walk,
 				UAMConstants.access + TransportMode.car, UAMConstants.egress + TransportMode.car,
 				UAMConstants.access + TransportMode.bike, UAMConstants.egress + TransportMode.bike};
 		for (String modeScore : modeScores) {
-			ConfigGroup modeParam = config.getModules().get("planCalcScore").createParameterSet("modeParams");
+			ConfigGroup modeParam = config.getModules().get("scoring").createParameterSet("modeParams");
 			modeParam.addParam("mode", modeScore);
 			modeParam.addParam("constant", "0.0");
 			modeParam.addParam("marginalUtilityOfDistance_util_m", "0.0");
 			modeParam.addParam("marginalUtilityOfTraveling_util_hr", "0.0");
 			modeParam.addParam("monetaryDistanceRate", "0.0");
-			config.getModules().get("planCalcScore").addParameterSet(modeParam);
+			config.getModules().get("scoring").addParameterSet(modeParam);
 		}
 	}
 }
