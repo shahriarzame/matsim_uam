@@ -119,7 +119,8 @@ public class RunCreateUAMRoutedScenario {
 				String vehicleInput) {
 		// READ REQUIRED INPUT FILES
 		Config config = ConfigUtils.loadConfig(configInput);
-		Scenario scenario = ScenarioUtils.loadScenario(config);
+		Config configForCreatingScenario = ConfigUtils.loadConfig(configInput);
+		Scenario scenario = ScenarioUtils.loadScenario(configForCreatingScenario);
 		Network network = scenario.getNetwork();
 		List<String[]> stations = CSVReaders.readCSV(stationInput);
 
@@ -499,7 +500,9 @@ public class RunCreateUAMRoutedScenario {
 				i = 10;
 				String station_preflighttime = station[i++];
 				String station_postflighttime = station[i++];
-				String station_defaultwaittime = station[i];
+				String station_defaultwaittime = station[i++];
+				String station_numberOfChargers = station[i++];
+				String station_chargingSpeed = station[i];
 
 				atts.add(new Tuple<>("id", station_id));
 				atts.add(new Tuple<>("name", station_name));
@@ -509,6 +512,8 @@ public class RunCreateUAMRoutedScenario {
 				atts.add(new Tuple<>("link",
 						name_uam_station_link + name_uam_nodes + station_id + name_uam_station_ground_access + "-"
 								+ name_uam_nodes + station_id + name_uam_station_flight_access));
+				atts.add(new Tuple<>("numberOfChargers", station_numberOfChargers));
+				atts.add(new Tuple<>("chargingSpeed", station_chargingSpeed));
 
 				writeStartTag("station", atts, true);
 			}
@@ -526,7 +531,10 @@ public class RunCreateUAMRoutedScenario {
 				String verticalspeed = vehicle[i++];
 				String boardingtime = vehicle[i++];
 				String deboardingtime = vehicle[i++];
-				String turnaroundtime = vehicle[i];
+				String turnaroundtime = vehicle[i++];
+				String maximumCharge = vehicle[i++];
+				String energyConsumptionHorizontal = vehicle[i++];
+				String energyConsumptionVertical = vehicle[i];
 
 				List<Tuple<String, String>> atts = new ArrayList<>();
 				atts.add(new Tuple<>("id", type));
@@ -537,6 +545,10 @@ public class RunCreateUAMRoutedScenario {
 				atts.add(new Tuple<>("boardingtime", boardingtime));
 				atts.add(new Tuple<>("deboardingtime", deboardingtime));
 				atts.add(new Tuple<>("turnaroundtime", turnaroundtime));
+				atts.add(new Tuple<>("maximumCharge", maximumCharge));
+				atts.add(new Tuple<>("energyConsumptionHorizontal", energyConsumptionHorizontal));
+				atts.add(new Tuple<>("energyConsumptionVertical", energyConsumptionVertical));
+
 				writeStartTag("vehicleType", atts, true);
 			}
 		}
